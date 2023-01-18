@@ -4,9 +4,11 @@ import random
 import os
 import re
 from re import IGNORECASE, escape, search
-from telegram import TelegramError, Update
+from telegram import Update
+from telegram.error import TelegramError
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler, Filters, MessageHandler, CallbackQueryHandler
+from telegram.constants import ParseMode
+from telegram.ext import ContextTypes, CommandHandler, filters as Filters, MessageHandler, CallbackQueryHandler
 import telegram.ext as tg
 import re
 import asyncio
@@ -15,7 +17,7 @@ import itertools
 from collections.abc import Iterable
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from cachetools import TTLCache
-from telegram import Chat, ChatMember, ParseMode, Update, TelegramError, User
+from telegram import Chat, ChatMember, Update, User
 from functools import wraps
 from config import MONGO_DB_URL, TOKEN
 
@@ -26,12 +28,13 @@ AI_API_KEY = "RBPOWF2m8z85prBQ"
 AI_BID = "171092"
 USERS_GROUP = 11
 
+application = Application.builder().token(TOKEN).build()
+asyncio.get_event_loop().run_until_complete(application.bot.initialize())
+BOT_ID = application.bot.id
+BOT_NAME = application.bot.first_name
+BOT_USERNAME = application.bot.username
 
-updater = tg.Updater(TOKEN, workers=32, use_context=True)
-dispatcher = updater.dispatcher
-BOT_ID = dispatcher.bot.id
-
-def start(update: Update, context: CallbackContext):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     msg = update.effective_message
     keyb = []
@@ -39,7 +42,7 @@ def start(update: Update, context: CallbackContext):
     msg.reply_text(f"ʜᴇʏᴀ\nɪ'ᴍ {context.bot.first_name}\nɪ ᴄᴀɴ ʜᴇʟᴘ ʏᴏᴜ ᴛᴏ ᴀᴄᴛɪᴠᴇ ʏᴏᴜʀ ᴄʜᴀᴛ", reply_markup=InlineKeyboardMarkup(keyb))
 
 
-def log_user(update: Update, context: CallbackContext):
+async def log_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
    chat = update.effective_chat
    message = update.effective_message
    try:
@@ -101,14 +104,14 @@ def log_user(update: Update, context: CallbackContext):
                    chatbotai.insert_one({"chat":chat.id, "word": message.reply_to_message.text, "text": message.text, "check": "none"})
 
 
-START = CommandHandler(["start", "ping"], start)
+START = CommandHandler(["start", "ping"], start, block=False)
 
 
 USER_HANDLER = MessageHandler(
-    Filters.all, log_user, run_async=True
+    Filters.ALL, log_user, block=False
 )
-dispatcher.add_handler(USER_HANDLER, USERS_GROUP)
-dispatcher.add_handler(START)
+application.add_handler(USER_HANDLER, USERS_GROUP)
+application.add_handler(START)
 
 print("ɪɴғᴏ: ʙᴏᴛᴛɪɴɢ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ")
-updater.start_polling()
+application.start_polling()
