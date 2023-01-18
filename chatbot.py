@@ -115,4 +115,4 @@ application.add_handler(USER_HANDLER, USERS_GROUP)
 application.add_handler(START)
 
 print("ɪɴғᴏ: ʙᴏᴛᴛɪɴɢ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ")
-application.start_polling()
+#application.start_polling()
