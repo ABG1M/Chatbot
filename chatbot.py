@@ -16,7 +16,7 @@ from typing import Union, List, Dict, Callable, Generator, Any
 import itertools
 from collections.abc import Iterable
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from cachetools import TTLCache
+#from cachetools import TTLCache
 from telegram import Chat, ChatMember, Update, User
 from functools import wraps
 from config import MONGO_DB_URL, TOKEN
