@@ -11,6 +11,7 @@ from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CommandHandler, filters as Filters, MessageHandler, CallbackQueryHandler
 import telegram.ext as tg
 import re
+from telegram.ext import Application
 import asyncio
 from typing import Union, List, Dict, Callable, Generator, Any
 import itertools
