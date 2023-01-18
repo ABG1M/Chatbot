@@ -29,7 +29,7 @@ AI_API_KEY = "RBPOWF2m8z85prBQ"
 AI_BID = "171092"
 USERS_GROUP = 11
 
-asyncio.get_event_loop().run_until_complete(application.bot.initialize())
+application = Application.builder().token(TOKEN).build()
 BOT_ID = application.bot.id
 BOT_NAME = application.bot.first_name
 BOT_USERNAME = application.bot.username
@@ -116,4 +116,5 @@ application.add_handler(START)
 print("ɪɴғᴏ: ʙᴏᴛᴛɪɴɢ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ")
 #application.start_polling()
 
-application = Application.builder().token(TOKEN).build()
+
+asyncio.get_event_loop().run_until_complete(application.bot.initialize())
