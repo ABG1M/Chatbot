@@ -17,7 +17,7 @@ from typing import Union, List, Dict, Callable, Generator, Any
 import itertools
 from collections.abc import Iterable
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-#from cachetools import TTLCache
+
 from telegram import Chat, ChatMember, Update, User
 from functools import wraps
 from config import MONGO_DB_URL, TOKEN
@@ -40,7 +40,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     keyb = []
     keyb.append([InlineKeyboardButton(text="ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ➕", url=f"http://t.me/{context.bot.username}?startgroup=true")])
-    msg.reply_text(f"ʜᴇʏᴀ\nɪ'ᴍ {context.bot.first_name}\nɪ ᴄᴀɴ ʜᴇʟᴘ ʏᴏᴜ ᴛᴏ ᴀᴄᴛɪᴠᴇ ʏᴏᴜʀ ᴄʜᴀᴛ", reply_markup=InlineKeyboardMarkup(keyb))
+    await msg.reply_text(f"ʜᴇʏᴀ\nɪ'ᴍ {context.bot.first_name}\nɪ ᴄᴀɴ ʜᴇʟᴘ ʏᴏᴜ ᴛᴏ ᴀᴄᴛɪᴠᴇ ʏᴏᴜʀ ᴄʜᴀᴛ", reply_markup=InlineKeyboardMarkup(keyb))
 
 
 async def log_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -91,9 +91,9 @@ async def log_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
                hey = r.json()["cnt"]
                Yo = None
            if Yo == "sticker":
-               message.reply_sticker(f"{hey}")
+               await message.reply_sticker(f"{hey}")
            if not Yo == "sticker":
-               message.reply_text(f"{hey}")
+               await message.reply_text(f"{hey}")
        if not message.reply_to_message.from_user.id == BOT_ID:          
            if message.sticker:
                is_chat = chatbotai.find_one({"chat":chat.id, "word": message.reply_to_message.text, "id": message.sticker.file_unique_id})
@@ -113,7 +113,5 @@ USER_HANDLER = MessageHandler(
 )
 application.add_handler(USER_HANDLER, USERS_GROUP)
 application.add_handler(START)
-
-
 
 application.run_polling()
