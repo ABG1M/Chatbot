@@ -32,8 +32,6 @@ USERS_GROUP = 11
 application = Application.builder().token(TOKEN).build()
 asyncio.get_event_loop().run_until_complete(application.bot.initialize())
 BOT_ID = application.bot.id
-BOT_NAME = application.bot.first_name
-BOT_USERNAME = application.bot.username
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
@@ -73,9 +71,9 @@ async def log_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
            hey = r.json()["cnt"]
            Yo = None
        if Yo == "sticker": 
-           message.reply_sticker(f"{hey}")
+           await message.reply_sticker(f"{hey}")
        if not Yo == "sticker":
-           message.reply_text(f"{hey}")
+           await message.reply_text(f"{hey}")
    if message.reply_to_message:                   
        if message.reply_to_message.from_user.id == BOT_ID:                    
            K = []  
